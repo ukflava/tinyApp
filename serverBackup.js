@@ -10,9 +10,7 @@ const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
 };
-const generateRandomString = () => {
-  return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1)
-}
+
 app.use(morgan("dev"))
 app.use(bodyParser.urlencoded({extended: true}));
 
@@ -39,10 +37,6 @@ app.get("/urls", (req, res) => {
   const templateVars = { 'shortURL': shortURL, 'longURL': urlDatabase[shortURL] };
   // console.log(templateVars);
   res.render("urls_show", templateVars);
-});
-app.post("/urls", (req, res) => {
-  console.log(req.body);  // Log the POST request body to the console
-  res.send("Good news everyone! Your form submitted");         // Respond with 'Ok' (we will replace this)
 });
  
 app.listen(PORT, () => {
