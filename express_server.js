@@ -8,6 +8,7 @@ const urlDatabase = {
   "9sm5xK": "http://www.google.com"
 };
 
+
 app.get("/", (req, res) => {
   res.send("Hello!");
 });
@@ -21,11 +22,15 @@ app.get("/urls", (req, res) => {
   const templateVars = { urls: urlDatabase };
   res.render("urls_index", templateVars);
  });
+ app.get("/urls/:shortURL", (req, res) => { 
+  const shortURL = req.params.shortURL
+  // console.log(shortURL)
+  // return res.send("helo")
+  const templateVars = { 'shortURL': shortURL, 'longURL': urlDatabase[shortURL] };
+  // console.log(templateVars);
+  res.render("urls_show", templateVars);
+});
  
- app.get("/fetch", (req, res) => {
-  res.send(`a = ${a}`);
- });
-
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
