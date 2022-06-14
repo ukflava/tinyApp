@@ -14,7 +14,7 @@ const generateRandomString = function() {
   return Math.floor((1 + Math.random()) * 0x1000000).toString(30).substring(1);
   
 };
-let id = generateRandomString()
+
 app.use(morgan("dev"))
 app.use(bodyParser.urlencoded({extended: true}));
 
@@ -36,18 +36,21 @@ app.get("/urls", (req, res) => {
  });
  app.get("/urls/:shortURL", (req, res) => { 
   const shortURL = req.params.shortURL
-  // console.log(shortURL)
-  // return res.send("helo")
-  const templateVars = { 'shortURL': shortURL, 'longURL': urlDatabase[shortURL] };
-  // console.log(templateVars);
-  res.render("urls_show", templateVars);
+    const templateVars = { 'shortURL': shortURL, 'longURL': urlDatabase[shortURL] };
+    res.render("urls_show", templateVars);
+});
+app.get("/u/:shortURL", (req, res) => {
+  // const shortURL = req.params.shortURL
+  const longURL = urlDatabase[req.params.shortURL];
+  res.redirect(longURL);
 });
 app.post("/urls", (req, res) => {
   let id = generateRandomString()
   console.log(id)
-  urlDatabase[id] = req.body;
+  urlDatabase[id] = `http://`+req.body.longURL;
   console.log(urlDatabase)  // Log the POST request body to the console
-  res.send("Good news everyone! Your form submitted");         // Respond with 'Ok' (we will replace this)
+  // res.send("Good news everyone! Your form submitted"); 
+  res.redirect(`/urls/${id}`);        // Respond with 'Ok' (we will replace this)
 });
  
 app.listen(PORT, () => {
