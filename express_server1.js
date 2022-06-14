@@ -11,7 +11,7 @@ const urlDatabase = {
   "9sm5xK": "http://www.google.com"
 };
 const generateRandomString = function() {
-  return Math.floor((1 + Math.random()) * 0x1000000).toString(30).substring(1);
+  return Math.floor((1 + Math.random()) * 0x1000000000).toString(30).substring(1);
   
 };
 
