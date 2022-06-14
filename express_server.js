@@ -19,7 +19,7 @@ app.use(morgan("dev"))
 app.use(bodyParser.urlencoded({extended: true}));
 
 app.get("/", (req, res) => {
-  res.send("Hello!");
+  res.redirect(`/urls/`);
 });
 app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
@@ -40,14 +40,14 @@ app.get("/urls", (req, res) => {
     res.render("urls_show", templateVars);
 });
 app.get("/u/:shortURL", (req, res) => {
-  // const shortURL = req.params.shortURL
+    // const shortURL = req.params.shortURL
   const longURL = urlDatabase[req.params.shortURL];
   res.redirect(longURL);
 });
 app.post("/urls", (req, res) => {
   let id = generateRandomString()
   console.log(id)
-  urlDatabase[id] = `http://`+req.body.longURL;
+  urlDatabase[id] = req.body.longURL;
   console.log(urlDatabase)  // Log the POST request body to the console
   // res.send("Good news everyone! Your form submitted"); 
   res.redirect(`/urls/${id}`);        // Respond with 'Ok' (we will replace this)
