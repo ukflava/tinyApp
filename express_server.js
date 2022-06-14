@@ -18,12 +18,13 @@ const generateRandomString = function() {
 app.use(morgan("dev"))
 app.use(bodyParser.urlencoded({extended: true}));
 
-// app.get("/", (req, res) => {
-//   res.redirect(`/urls/`);
-// });
-// app.get("/urls.json", (req, res) => {
-//   res.json(urlDatabase);
-// });
+app.post("/urls/:id", (req, res) => {
+  const shortURL = req.params.id
+  console.log("bbbbbbb")
+  delete urlDatabase[shortURL]
+  // console.log(urlDatabase)
+  res.redirect(`/urls/`);        // Respond with 'Ok' (we will replace this)
+});
 app.get("/urls/new", (req, res) => {
   res.render("urls_new");
 });
