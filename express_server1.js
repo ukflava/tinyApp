@@ -17,33 +17,39 @@ const generateRandomString = function() {
 
 app.use(morgan("dev"))
 app.use(bodyParser.urlencoded({extended: true}));
-
-app.post("/urls/:id", (req, res) => {
-  const shortURL = req.params.id
-  console.log("bbbbbbb")
-  delete urlDatabase[shortURL]
-  // console.log(urlDatabase)
-  res.redirect(`/urls/`);        // Respond with 'Ok' (we will replace this)
-});
+// app.get("/urls/:id", (req, res) => {
+//   const id = req.params.id;
+//   console.log('id:',id)
+//   res.render("urls_show", id);
+//  });
 app.get("/urls/new", (req, res) => {
   res.render("urls_new");
 });
 // app.get("/hello", (req, res) => {
-//   res.send("<html><body>Hello <b>World</b></body></html>\n");
-// });
-app.post("/urls/:shortURL/delete", (req, res) => {
-  const shortURL = req.params.shortURL
-  console.log("aaaaaaa")
-  delete urlDatabase[shortURL]
-  // console.log(urlDatabase)
-  res.redirect(`/urls/`);        // Respond with 'Ok' (we will replace this)
-});
-app.get("/urls/:shortURL", (req, res) => { 
-  const shortURL = req.params.shortURL
-  const templateVars = { 'shortURL': shortURL, 'longURL': urlDatabase[shortURL] };
-  res.render("urls_show", templateVars);
-});
+  //   res.send("<html><body>Hello <b>World</b></body></html>\n");
+  // });
+  app.post("/urls/:shortURL/delete", (req, res) => {
+    const shortURL = req.params.shortURL
+    // console.log("aaaaaaa")
+    delete urlDatabase[shortURL]
+    // console.log(urlDatabase)
+    res.redirect(`/urls/`);        // Respond with 'Ok' (we will replace this)
+  });
+  app.get("/urls/:shortURL", (req, res) => { 
+    const shortURL = req.params.shortURL
+    const templateVars = { 'shortURL': shortURL, 'longURL': urlDatabase[shortURL] };
+    res.render("urls_show", templateVars);
+  });
+  app.post("/urls/:id", (req, res) => {
+    const shortURL = req.params.id
+    console.log("short:", shortURL)
+    urlDatabase[shortURL] = req.body.longURL
+    console.log(req.body, req.params)
+    res.redirect(`/urls/`);     
+  });
 /// START LOOKING PROBLEM HERE
+
+
 app.get("/u/:shortURL", (req, res) => {
 
   const shortURL = req.params.shortURL;

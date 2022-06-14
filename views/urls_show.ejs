@@ -15,10 +15,16 @@
       <div class="card-body">
         <h5 class="card-title">TinyURL for: <%= longURL %></h5>
         <p class="card-text">Short URL: <a href="/u/<%= shortURL %>"><%= shortURL %></a></p>
-
+        <h6 class="card-title">Edit TinyURL for: <%= longURL %></h6>
+        <form class="form-inline" action="/urls/<%=shortURL %>" method="POST">
+          <div class="form-group mb-2">
+            <label for="longURL">Enter new URL:</label>
+            <input class="form-control" type="text" name="longURL" placeholder="http://" style="width: 300px; margin: 1em">
+            <button type="submit" class="btn btn-warning">Edit</button>
+          </div>
+        </form>
         <a class="nav-link" href="/urls/new">shortening a new URL</a>
-        <form method="POST" action=/urls/:id><label for="name">Enter new url: </label>
-          <input type="text" name="name" id="name" required><button type="submit" class="btn btn-primary">Edit</button></form>
+        
       </div>
     <div class="card-footer text-muted"></div>
   </div>
@@ -28,3 +34,9 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 </body>
 </html>
+
+<!-- <input class="form-control" type="text" name="longURL" placeholder="http://" style="width: 300px; margin: 1em">
+          <button type="submit" class="btn btn-primary">Submit</button> -->
+
+          <!-- <form method="POST" action=/urls/:id><label for="name">Enter new url: </label>
+            <input type="text" name="name" id="name" required><button type="submit" class="btn btn-primary">Edit</button></form> -->
