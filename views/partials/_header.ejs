@@ -1,4 +1,5 @@
 <header>
+  
   <nav class="navbar navbar-expand-md navbar-dark bg-success">
     <a class="navbar-brand" href="/urls">TinyApp</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -9,21 +10,18 @@
         <a class="nav-item nav-link" href="/urls">My URLs</a>
         <a class="nav-item nav-link" href="/urls/new">Create New URL</a>
       </div>
-      
-      <div class="aling-right">
+    </div>
       <% if(username === true || username === undefined){ %>
         <form method="POST" action="/login">
           <input type="text" name="username" placeholder="Username">
           <button type="submit" class="btn btn-outline-dark" >Login</button>
         </form>
         <% } else {%>
-          <form method="POST" action="/logout">
-          <button type="submit" class="btn btn-outline-dark" >logout</button>
-          <h5 class="card-title"><%= username %></h5>
+          <h5>Logged in as: <%= username %>!        </h5> <form method="POST" action="/logout">
+            <button type="submit" class="btn btn-outline-dark" >logout</button>
         </form>
         <% } %>
       
-    </div>
   </nav>
   
     

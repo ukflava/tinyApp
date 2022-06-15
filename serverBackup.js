@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const PORT = 8080; // default port 8080
-const morgan = require("morgan")
+const morgan = require("morgan");
 app.set("view engine", "ejs");
 const bodyParser = require("body-parser");
 
@@ -11,7 +11,7 @@ const urlDatabase = {
   "9sm5xK": "http://www.google.com"
 };
 
-app.use(morgan("dev"))
+app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({extended: true}));
 
 app.get("/", (req, res) => {
@@ -29,9 +29,9 @@ app.get("/hello", (req, res) => {
 app.get("/urls", (req, res) => {
   const templateVars = { urls: urlDatabase };
   res.render("urls_index", templateVars);
- });
- app.get("/urls/:shortURL", (req, res) => { 
-  const shortURL = req.params.shortURL
+});
+app.get("/urls/:shortURL", (req, res) => {
+  const shortURL = req.params.shortURL;
   // console.log(shortURL)
   // return res.send("helo")
   const templateVars = { 'shortURL': shortURL, 'longURL': urlDatabase[shortURL] };
