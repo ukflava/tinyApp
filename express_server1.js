@@ -26,9 +26,11 @@ app.use(cookieParser())
 //   res.redirect(`/urls/`)
 //  });
 app.post("/logout", function (req, res) {
-    console.log(req.cookies)
+    console.log("fffffff")
   res.clearCookie('username').redirect(301, '/urls/');
+  res.redirect(`/urls/`)
 });
+
 app.post("/login", function (req, res) {
   
   let username = req.body.username
