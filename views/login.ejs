@@ -11,14 +11,24 @@
 </header>
 
     <main style="margin: 1em;">
-      <h3>Create TinyURL</h3>
-      <form class="form-inline" action="/urls" method="POST">
+      <h3>Login</h3>
+      <!-- <form class="form-inline" action="/urls" method="POST">
         <div class="form-group mb-2">
           <label for="longURL">Enter a URL:</label>
           <input class="form-control" type="text" name="longURL" placeholder="http://" style="width: 300px; margin: auto">
           <button type="submit" class="btn btn-primary">Submit</button>
         </div>
+      </form> -->
+      <form action="/login" method="post">
+        <!-- <input class="text" type="text" name="Username" placeholder="Username" required=""> -->
+        <input class="text email" type="email" name="email" placeholder="Email" required="">
+        <input class="text" type="password" name="password" placeholder="Password" required="">
+        <!-- <input class="text w3lpass" type="password" name="password" placeholder="Confirm Password" required=""> -->
+         <div class="clear"> </div>
+        </div>
+        <input type="submit" value="Login">
       </form>
+      <p>Dont have an Account? <a href="/register"> Sing up Now!</a></p>
     </main>
       <!-- Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

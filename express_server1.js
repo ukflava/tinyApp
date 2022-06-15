@@ -16,28 +16,66 @@ const generateRandomString = function() {
   return Math.floor((1 + Math.random()) * 0x1000000000).toString(30).substring(1);
   
 };
+const users = { 
+  "userRandomID": {
+    id: "userRandomID", 
+    email: "user@example.com", 
+    password: "purple-monkey-dinosaur"
+  },
+ 
+}
 
 app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
+
+app.get("/register", (req, res) => {
+  const templateVars = { urls: urlDatabase, username : req.cookies.username };
+  res.render("register", templateVars);
+});
+app.post("/register", function(req, res) {
+if ( !req.body.email || !req.body.password ){
+  res.status(400).redirect('/login')
+}
+for (let key in users){
+if ( users[key].username === req.body.email){
+  res.status(400).redirect('/login')
+}};
+{
+  userID = "user"+generateRandomString();
+  users[userID] = {}
+  users[userID].id = userID;
+  users[userID].username = req.body.email;
+  users[userID].password = req.body.password;
+    // templateVars.username = req.body.username;
+  // req.cookies.username = req.body.username
+  console.log(users ,req.cookies);
+  res.cookie('username', users[userID]).redirect(301, '/urls/');
+}
+});
 
 // app.get("/urls/login", (req, res) => {
 //   const templateVars = { urls: urlDatabase, username : req.cookies.username };
 //   res.redirect(`/urls/`)
 //  });
 app.post("/logout", function(req, res) {
-  console.log("fffffff");
-  res.clearCookie('username').redirect(301, '/urls/');
-  res.redirect(`/urls/`);
+    res.clearCookie('username').redirect(301, '/urls/');
+  // res.redirect(`/urls/`);
 });
-
+app.get("/login", (req, res) => {
+  const templateVars = { urls: urlDatabase, username : req.cookies.username };
+  res.render("login", templateVars);
+});
 app.post("/login", function(req, res) {
-  
-  let username = req.body.username;
-  templateVars.username = req.body.username;
-  // req.cookies.username = req.body.username
-  console.log(req.cookies);
-  res.cookie('username', username).redirect(301, '/urls/');
+  for (let key in users){
+    if ( users[key].username === req.body.email && users[key].password === req.body.password){
+      res.cookie('username', users[key]).redirect(301, '/urls/')
+      
+    }
+  else { console.log('password  or email fail')
+    // alert('password  or email fail!')
+    res.status(403).redirect('/login')}}
+ 
 });
 
 
