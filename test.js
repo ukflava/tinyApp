@@ -9,10 +9,12 @@ const generateRandomString = function() {
   return Math.floor((1 + Math.random()) * 0x1000000000).toString(30).substring(1);
   
 };
-const filteredObject = Object.keys(id).reduce(function(acc, val) {
-  if (id[val].userID === 'aJ48lW')  acc[val] = id[val];
+const filteredObject = (ids) => { ids = Object.keys(ids).reduce(function(acc, val) {
+  if (ids[val].userID === 'aJ48lW')  acc[val] = ids[val];
   return acc;
-}, {});
+}, {})
+return ids
+};
 
 // console.log(urlsForUser(urlDatabase));
-console.log(filteredObject);
+console.log(filteredObject(id));

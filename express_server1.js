@@ -7,8 +7,8 @@ const bodyParser = require("body-parser");
 // const cookie = require('cookie')
 // const popup = require('popups')
 const cookieParser = require('cookie-parser');
-// REfactored to user_id
-
+const bcrypt = require('bcryptjs')
+// REfactored to user_id as requested, but its confusing - we have userid in different cases 3 times
 
 
 //GLOBAL SCOPE VARS AND FN
@@ -23,6 +23,13 @@ const generateRandomString = function() {
   return Math.floor((1 + Math.random()) * 0x1000000000).toString(30).substring(1);
 };
 const users = {};
+
+const filteredObject = (urlDB,key) => { urlDB = Object.keys(urlDB).reduce(function(acc, val) {
+  if (urlDB[val].userID === key)  acc[val] = urlDB[val];
+  return acc;
+}, {})
+return urlDB
+};
 
 
 
@@ -58,7 +65,7 @@ app.post("/register", function(req, res) {
       users[userID] = {};
       users[userID].id = userID;
       users[userID].user_id = req.body.email;
-      users[userID].password = req.body.password;
+      users[userID].password = bcrypt.hashSync(req.body.password,10);
       console.log(users ,req.cookies);
       res.cookie('user_id', users[userID]).redirect(301, '/urls/');
     }
@@ -80,7 +87,7 @@ app.post("/login", function(req, res) {
   console.log(req.body, users);
   if (req.body.email && req.body.email) {
     for (let key in users) {
-      if (users[key].user_id === req.body.email && users[key].password === req.body.password) {
+      if (users[key].user_id === req.body.email && bcrypt.compareSync(req.body.password, users[key].password)) {
         return res.cookie('user_id', users[key]).redirect(301, '/urls/');
       }res.send("Invalid login");
       //   // alert('password  or email fail!')
@@ -137,10 +144,7 @@ app.get("/urls", (req, res) => {
   if (!req.cookies.user_id) {
     res.redirect(`/`);
   } else {
-    const filteredURL = Object.keys(urlDatabase).reduce(function(acc, val) {
-      if (urlDatabase[val].userID === req.cookies.user_id.id)  acc[val] = urlDatabase[val];
-      return acc;
-    }, {});
+    const filteredURL = filteredObject(urlDatabase, req.cookies.user_id.id)  
     console.log(filteredURL, urlDatabase);
     const templateVars = { urls: filteredURL, user_id : req.cookies.user_id };
     res.render("urls_index", templateVars);
@@ -157,9 +161,7 @@ app.post("/urls", (req, res) => {
     urlDatabase[id] = {};
     urlDatabase[id].longURL = req.body.longURL;
     urlDatabase[id].userID = req.cookies.user_id.id;
-    // Log the POST request body to the console
-    // res.send("Good news everyone! Your form submitted");
-    res.redirect(`/urls/${id}`);        // Respond with 'Ok' (we will replace this)
+     res.redirect(`/urls/${id}`);        
   }
 });
 
@@ -170,7 +172,7 @@ app.get("/", (req, res) => {
 });
 // REDIRECT FUNCTION**********************************************
 app.get("/u/:shortURL", (req, res) => {
-  const templateVars = { urls: urlDatabase, user_id : req.cookies.user_id  };
+  // const templateVars = { urls: urlDatabase, user_id : req.cookies.user_id  };
   const shortURL = req.params.shortURL;
   const longURL = urlDatabase[shortURL].longURL;
   res.redirect(longURL);
