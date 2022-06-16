@@ -17,9 +17,9 @@
         <h5 class="card-title">TinyURL for:<b> <%= longURL %> </b> </h5>
         <p class="card-text">Short URL: <a href="/u/<%= shortURL %>"><%= shortURL %></a></p>
         
-        <div class="card text-center" style="background-color:#27b142">
-        <h2 class="card-title" style="background-color:#27b142">Edit your URL</h2>
-        <form style="background-color:#27b142" action="/urls/<%=shortURL %>" method="POST">
+        <div class="card text-center" style="background-color:#28a745">
+        <h2 class="card-title" style="background-color:#28a745">Edit your URL</h2>
+        <form style="background-color:#28a745" action="/urls/<%=shortURL %>" method="POST">
           <div class="form-group mb-2">
             <label for="longURL"><b>Enter new URL:</b></label>
             <input type="text" name="longURL" placeholder="http://" style="width: 500px; margin: bottom">

@@ -21,7 +21,7 @@
       <a class="nav-item nav-link" href="/register">Register</a>
     </div>
       <% } else {%>
-        <h5>Logged in as: <%= user_id.user_id %>!        </h5> <form method="POST" action="/logout">
+        <h5>Logged in as: <%= user_id.email %>!        </h5> <form method="POST" action="/logout">
           <button type="submit" class="btn btn-outline-dark" >logout</button>
         </form>
         <% } %>
