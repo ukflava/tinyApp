@@ -22,6 +22,9 @@ const generateRandomString = function() {
   return Math.floor((1 + Math.random()) * 0x1000000000).toString(30).substring(1);
   
 };
+const urlsForUser = (id) => {
+      
+}
 const users = { 
   "userRandomID": {
     id: "userRandomID", 
@@ -103,7 +106,7 @@ app.post("/login", function(req, res) {
 
 app.get("/urls/new", (req, res) => {
   if(!req.cookies.user_id){
-    res.redirect(`/login`)
+    res.redirect(`/`)
 }
 
     else{
@@ -128,7 +131,7 @@ app.get("/urls/:shortURL", (req, res) => {
 });
 app.post("/urls/:id", (req, res) => {
   if(!req.cookies.user_id){
-    res.redirect(`/login`)
+    res.redirect(`/`)
 }
 
     else{
@@ -148,17 +151,19 @@ app.get("/u/:shortURL", (req, res) => {
 });
 app.get("/urls", (req, res) => {
   if(!req.cookies.user_id){
-    res.redirect(`/login`)
+    res.redirect(`/`)
 }
 
     else{
+      //fn find database for user
+  
   const templateVars = { urls: urlDatabase, user_id : req.cookies.user_id };
   res.render("urls_index", templateVars);
     }
 });
 app.post("/urls", (req, res) => {
   if(!req.cookies.user_id){
-    res.redirect(`/login`)
+    res.redirect(`/`)
 }
 
     else{
@@ -173,7 +178,7 @@ app.post("/urls", (req, res) => {
 });
 app.get("/", (req, res) => {
   const templateVars = { urls: urlDatabase, user_id : req.body.user_id };
-  res.render("urls_index", templateVars);
+  res.render("main", templateVars);
   
 });
   

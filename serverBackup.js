@@ -8,24 +8,23 @@ const bodyParser = require("body-parser");
 const cookieParser = require('cookie-parser');
 
 const urlDatabase = {
-  "b2xVn2": "http://www.lighthouselabs.ca",
-  "9sm5xK": "http://www.google.com"
+  b6UTxQ: {
+        longURL: "https://www.tsn.ca",
+        userID: "aJ48lW"
+    },
+    i3BoGr: {
+        longURL: "https://www.google.ca",
+        userID: "aJ48lW"
+    }
 };
-// const urlDatabase = {
-//   b6UTxQ: {
-//         longURL: "https://www.tsn.ca",
-//         userID: "aJ48lW"
-//     },
-//     i3BoGr: {
-//         longURL: "https://www.google.ca",
-//         userID: "aJ48lW"
-//     }
-// };
 const templateVars = {};
 const generateRandomString = function() {
   return Math.floor((1 + Math.random()) * 0x1000000000).toString(30).substring(1);
   
 };
+const urlsForUser = (id) => {
+      
+}
 const users = { 
   "userRandomID": {
     id: "userRandomID", 
@@ -137,7 +136,7 @@ app.post("/urls/:id", (req, res) => {
 
     else{
   const shortURL = req.params.id;
-  urlDatabase[shortURL] = req.body.longURL;
+  urlDatabase[shortURL].longURL = req.body.longURL;
   res.redirect(`/urls/`);
     }
 });
@@ -151,8 +150,16 @@ app.get("/u/:shortURL", (req, res) => {
   res.redirect(longURL);
 });
 app.get("/urls", (req, res) => {
+  if(!req.cookies.user_id){
+    res.redirect(`/login`)
+}
+
+    else{
+      //fn find database for user
+  
   const templateVars = { urls: urlDatabase, user_id : req.cookies.user_id };
   res.render("urls_index", templateVars);
+    }
 });
 app.post("/urls", (req, res) => {
   if(!req.cookies.user_id){
@@ -161,7 +168,9 @@ app.post("/urls", (req, res) => {
 
     else{
   let id = generateRandomString();
-  urlDatabase[id] = req.body.longURL;
+  urlDatabase[id] = {}
+  urlDatabase[id].longURL = req.body.longURL;
+  urlDatabase[id].user_id = req.cookies.user_id;
   // Log the POST request body to the console
   // res.send("Good news everyone! Your form submitted");
   res.redirect(`/urls/${id}`);        // Respond with 'Ok' (we will replace this)
