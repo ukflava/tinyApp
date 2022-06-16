@@ -7,7 +7,10 @@ const bodyParser = require("body-parser");
 // const cookie = require('cookie')
 // const popup = require('popups')
 const cookieParser = require('cookie-parser');
-// REfactored to user_id 
+// REfactored to user_id
+
+
+
 //GLOBAL SCOPE VARS AND FN
 const urlDatabase = {
   sgq3y6: {
@@ -20,10 +23,15 @@ const generateRandomString = function() {
   return Math.floor((1 + Math.random()) * 0x1000000000).toString(30).substring(1);
 };
 const users = {};
+
+
+
 // MIDDLEWARE********************************************
 app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
+
+
 
 //ROUTE
 // ACCOUNTING USERS************************************************
@@ -70,14 +78,14 @@ app.get("/login", (req, res) => {
 });
 app.post("/login", function(req, res) {
   console.log(req.body, users);
-  for (let key in users) {
-    if (users[key].user_id === req.body.email && users[key].password === req.body.password) {
-      return res.cookie('user_id', users[key]).redirect(301, '/urls/');
-    } else {
-      console.log('password  or email fail');
-      // //   // alert('password  or email fail!')
+  if (req.body.email && req.body.email) {
+    for (let key in users) {
+      if (users[key].user_id === req.body.email && users[key].password === req.body.password) {
+        return res.cookie('user_id', users[key]).redirect(301, '/urls/');
+      }res.send("Invalid login");
+      //   // alert('password  or email fail!')
     }
-  }
+  } else res.send("Invalid login");
 });
 
 
@@ -98,26 +106,29 @@ app.get("/urls/:shortURL", (req, res) => {
 });
 app.post("/urls/:shortURL/delete", (req, res) => {
   const shortURL = req.params.shortURL;
-  if(urlDatabase[shortURL].userID === req.cookies.user_id.id){
-   delete urlDatabase[shortURL];
-  // console.log(urlDatabase)
-  res.redirect(`/urls/`);      }
-  else {res.send("You dont have permission for this operation")}
+  if (urlDatabase[shortURL].userID === req.cookies.user_id.id) {
+    delete urlDatabase[shortURL];
+    // console.log(urlDatabase)
+    res.redirect(`/urls/`);
+  } else {
+    res.send("You dont have permission for this operation");
+  }
 });
 app.post("/urls/:id", (req, res) => {
   if (!req.cookies.user_id) {
     res.redirect(`/`);
-  }  else if(req.body.longURL.length <= 2){
+  }  else if (req.body.longURL.length <= 2) {
   
-    res.send("Empty URL")} 
-    else {const shortURL = req.params.id
-      if (urlDatabase[shortURL].userID === req.cookies.user_id.id){
+    res.send("Empty URL");
+  } else {
     const shortURL = req.params.id;
+    if (urlDatabase[shortURL].userID === req.cookies.user_id.id) {
+      const shortURL = req.params.id;
 
-    urlDatabase[shortURL].longURL = req.body.longURL;
-    res.redirect(`/urls/`);
+      urlDatabase[shortURL].longURL = req.body.longURL;
+      res.redirect(`/urls/`);
+    }
   }
-}
 });
 
   
@@ -138,9 +149,9 @@ app.get("/urls", (req, res) => {
 app.post("/urls", (req, res) => {
   if (!req.cookies.user_id) {
     res.redirect(`/`);
-  } else if(req.body.longURL.length <= 2){
-    res.redirect(`/urls/new`)}  
-  else {
+  } else if (req.body.longURL.length <= 2) {
+    res.redirect(`/urls/new`);
+  } else {
     let id = generateRandomString();
     console.log("cookies user_id from urls",req.cookies.user_id);
     urlDatabase[id] = {};

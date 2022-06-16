@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-  <title>URL - TinyApp Example</title>
+  <%- include('./partials/head'); %>
 </head>
+<body class="container">
 
 <body>
   <header>
@@ -17,16 +17,16 @@
         <h5 class="card-title">TinyURL for:<b> <%= longURL %> </b> </h5>
         <p class="card-text">Short URL: <a href="/u/<%= shortURL %>"><%= shortURL %></a></p>
         
-        <div class="card text-center">
-        <h2 class="card-title" style="background-color:#c5d4c8">Edit</h2>
-        <form style="background-color:#c5d4c8" action="/urls/<%=shortURL %>" method="POST">
+        <div class="card text-center" style="background-color:#27b142">
+        <h2 class="card-title" style="background-color:#27b142">Edit your URL</h2>
+        <form style="background-color:#27b142" action="/urls/<%=shortURL %>" method="POST">
           <div class="form-group mb-2">
-            <label for="longURL">Enter new URL:</label>
+            <label for="longURL"><b>Enter new URL:</b></label>
             <input type="text" name="longURL" placeholder="http://" style="width: 500px; margin: bottom">
             <button type="submit" class="btn btn-warning">Submit</button>
           </div>
         </form>
-        <a class="nav-link" href="/urls/new">shortening a new URL</a>
+        <a class="nav-link" href="/urls/new"><button type="submit" class="btn btn-info">Short another URL</button></a>
       </div>
       </div>
     <div class="card-footer text-muted"></div>
