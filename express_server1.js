@@ -9,6 +9,7 @@ const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const bcrypt = require('bcryptjs');
 const cookieSession = require('cookie-session');
+const methodOverride = require('method-override');
 app.set("view engine", "ejs");
 
 //GLOBAL SCOPE VARS AND FN
@@ -20,6 +21,7 @@ const {generateRandomString, filteredObject, getUserByEmail, urlDatabase, users}
 // MIDDLEWARE********************************************
 app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(methodOverride('_method'));
 app.use(cookieSession({
   name: 'session',
   keys: ['key1', 'key2']
@@ -43,7 +45,6 @@ app.post("/register", function(req, res) {
     res.status(400).send('Error: Check your email and password');
   } else {
     const user = getUserByEmail(req.body.email, users);
-    console.log("user from register", user);
     if (user) {
       return res.status(403).send("This email already used, try another");
     } else {
@@ -52,7 +53,6 @@ app.post("/register", function(req, res) {
       users[userID].id = userID;
       users[userID].email = req.body.email;
       users[userID].password = bcrypt.hashSync(req.body.password,10);
-      console.log(users ,req.cookies);
       req.session.user_id = users[userID];
       res.status(301).redirect('/urls/');
     }
@@ -71,7 +71,6 @@ app.get("/login", (req, res) => {
 
 // POST LOGIN
 app.post("/login", function(req, res) {
-  console.log(req.body, users);
   if (req.body.email && req.body.email) {
     // can use Fn find user here - but prefer to use loop key to check password of same user - code still dry
     for (let key in users) {
@@ -105,13 +104,16 @@ app.get("/urls/new", (req, res) => {
 app.get("/urls/:shortURL", (req, res) => {
   const shortURL = req.params.shortURL;
   if (!req.session.user_id) {
-    res.status(401).send("You dont have permission for this action");
+    res.status(401).send("Login to visit this page");
   }
   if (!urlDatabase[shortURL]) {
     res.status(404).send("Requested URL not found");
   }
   if (urlDatabase[shortURL].userID === req.session.user_id.id) {
-    const templateVars = { 'shortURL': shortURL, 'longURL': urlDatabase[shortURL].longURL,  urls: urlDatabase, user_id : req.session.user_id };
+          
+    urlDatabase[shortURL].statistics.push(`VISITED: ${generateRandomString()} /  DATE: ${new Date(Date.now())}`);
+    urlDatabase[shortURL].visited = (urlDatabase[shortURL].visited || 0) + 1;
+    const templateVars = { statistics : urlDatabase[shortURL].statistics, 'shortURL': shortURL, 'longURL': urlDatabase[shortURL].longURL, views: urlDatabase[shortURL].visited,  urls: urlDatabase, user_id : req.session.user_id };
     res.render("urls_show", templateVars);
   } else {
     res.status(401).send("You dont have permission for this action");
@@ -119,8 +121,8 @@ app.get("/urls/:shortURL", (req, res) => {
 });
 
 // EDIT AND DELETE URLS POST SECTION
-// POST /urls/:id/delete
-app.post("/urls/:shortURL/delete", (req, res) => {
+// POST CHANGED TO DELETE /urls/:id/delete
+app.delete("/urls/:shortURL/delete", (req, res) => {
   const shortURL = req.params.shortURL;
   if (!req.session.user_id) {
     res.status(401).send("You need to login for this action");
@@ -133,8 +135,8 @@ app.post("/urls/:shortURL/delete", (req, res) => {
     }
   }
 });
-// POST /urls/:id
-app.post("/urls/:id", (req, res) => {
+// POST CHANGED TO PUT /urls/:id
+app.put("/urls/:id", (req, res) => {
   const shortURL = req.params.id;
   if (!req.session.user_id) {
     res.status(401).send("You need to login for this action");
@@ -160,7 +162,6 @@ app.get("/urls", (req, res) => {
     res.status(401).send("You need to login first ");
   } else {
     const filteredURL = filteredObject(urlDatabase, req.session.user_id.id);
-    console.log(filteredURL, urlDatabase);
     const templateVars = { urls: filteredURL, user_id : req.session.user_id };
     res.render("urls_index", templateVars);
   }
@@ -173,10 +174,10 @@ app.post("/urls", (req, res) => {
     res.redirect(`/urls/new`);
   } else {
     let id = generateRandomString();
-    console.log("session user_id from urls",req.session.user_id);
     urlDatabase[id] = {};
     urlDatabase[id].longURL = req.body.longURL;
     urlDatabase[id].userID = req.session.user_id.id;
+    urlDatabase[id].statistics = [];
     res.redirect(`/urls/${id}`);
   }
 });

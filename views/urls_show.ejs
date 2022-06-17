@@ -14,12 +14,13 @@
       <div class="card-header"></div>
 
       <div class="card-body">
+       
         <h5 class="card-title">TinyURL for:<b> <%= longURL %> </b> </h5>
         <p class="card-text">Short URL: <a href="/u/<%= shortURL %>"><%= shortURL %></a></p>
         
         <div class="card text-center" style="background-color:#28a745">
         <h2 class="card-title" style="background-color:#28a745">Edit your URL</h2>
-        <form style="background-color:#28a745" action="/urls/<%=shortURL %>" method="POST">
+        <form style="background-color:#28a745" action="/urls/<%=shortURL %>?_method=PUT" method="POST">
           <div class="form-group mb-2">
             <label for="longURL"><b>Enter new URL:</b></label>
             <input type="text" name="longURL" placeholder="http://" style="width: 500px; margin: bottom">
@@ -27,9 +28,25 @@
           </div>
         </form>
         <a class="nav-link" href="/urls/new"><button type="submit" class="btn btn-info">Short another URL</button></a>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col" style="background-color:#28a745">Visitor ID and date of visit</th>
+                            
+            </tr>
+          </thead>
+          <tbody>
+            <% for(let visits of statistics) { %>
+              <tr>
+                <td><%= visits %></td>
+                
+                 </tr>
+            <% } %>
+          </tbody>
+        </table>
       </div>
       </div>
-    <div class="card-footer text-muted"></div>
+    <div class="card-footer text-muted">Total visits: <%= views%>.</div>
   </div>
   <!-- Bootstrap JS -->
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
