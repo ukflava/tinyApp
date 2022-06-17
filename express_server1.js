@@ -110,18 +110,25 @@ app.get("/urls/:shortURL", (req, res) => {
     res.status(404).send("Requested URL not found");
   }
   if (urlDatabase[shortURL].userID === req.session.user_id.id) {
-          
+    // checker of unique visitors works ONLY if all users can visit short URL page, but Compass says: 
+    // if user is logged it but does not own the URL with the given ID: returns HTML with a relevant error message
+  
+       if(!urlDatabase[shortURL].uniqueVisitors.includes(req.session.user_id.id)){
+      urlDatabase[shortURL].uniqueVisitors.push(req.session.user_id.id)}
+
+// This checker pushes every visit to statistics
     urlDatabase[shortURL].statistics.push(`VISITED: ${generateRandomString()} /  DATE: ${new Date(Date.now())}`);
+// This checker counts every visit
     urlDatabase[shortURL].visited = (urlDatabase[shortURL].visited || 0) + 1;
-    urlDatabase[shortURL].uniqueVisitor = (urlDatabase[shortURL].visited || 0) + 1
-    const templateVars = { statistics : urlDatabase[shortURL].statistics, 'shortURL': shortURL, 'longURL': urlDatabase[shortURL].longURL, views: urlDatabase[shortURL].visited,  urls: urlDatabase, user_id : req.session.user_id };
+ 
+    const templateVars = {uniqueVisitors: urlDatabase[shortURL].uniqueVisitors.length, statistics : urlDatabase[shortURL].statistics, 'shortURL': shortURL, 'longURL': urlDatabase[shortURL].longURL, views: urlDatabase[shortURL].visited,  urls: urlDatabase, user_id : req.session.user_id };
     res.render("urls_show", templateVars);
   } else {
     res.status(401).send("You dont have permission for this action");
   }
 });
 
-// EDIT AND DELETE URLS POST SECTION
+// EDIT AND DELETE URLS POST SECTION*********************************************************
 // POST CHANGED TO DELETE /urls/:id/delete
 app.delete("/urls/:shortURL/delete", (req, res) => {
   const shortURL = req.params.shortURL;
@@ -179,6 +186,8 @@ app.post("/urls", (req, res) => {
     urlDatabase[id].longURL = req.body.longURL;
     urlDatabase[id].userID = req.session.user_id.id;
     urlDatabase[id].statistics = [];
+    urlDatabase[id].uniqueVisitors = [];
+
     res.redirect(`/urls/${id}`);
   }
 });

@@ -20,6 +20,13 @@ const getUserByEmail = (key, usersDB) => {
     }
   }
 };
+const uniqueID = (key, urlDB) => {
+  for (let val in urlDB) {
+    if (urlDB[val].uniqueID === key) {
+      return true;
+    }
+  }
+};
 const urlDatabase = {};
 const users = {};
     

@@ -27,5 +27,8 @@ TinyApp is a full stack web application built with Node and Express that allows 
 - Run the development web server using the `node express_server.js` command.
 
 ## Known bugs
-Compass require to redirect users after logout to /urls - Tinyapp send client an error message after redirect
+*Compass require to redirect users after logout to /urls - Tinyapp send client an error message after redirect
 - if user is not logged in: returns HTML with a relevant error message
+
+*Checker of unique visitors works ONLY if all users can visit short URL page, but requested logic says: 
+- if user is logged it but does not own the URL with the given ID: returns HTML with a relevant error message
