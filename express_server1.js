@@ -1,10 +1,10 @@
 // NOTES
 // Identifier 'user_id' is not in camel case - requested by Compass
-// Compass ask redirect unlogged users to /urls - but urls only for logged users
+
 
 const express = require("express");
 const app = express();
-const PORT = 8080; // default port 8080
+const PORT = 8080;
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const bcrypt = require('bcryptjs');
@@ -12,13 +12,8 @@ const cookieSession = require('cookie-session');
 app.set("view engine", "ejs");
 
 //GLOBAL SCOPE VARS AND FN
-const urlDatabase = {};
-const templateVars = {};
-const generateRandomString = function() {
-  return Math.floor((1 + Math.random()) * 0x1000000000).toString(30).substring(1);
-};
-const users = {};
-const {filteredObject, getUserByEmail} = require("./helpers");
+
+const {generateRandomString, filteredObject, getUserByEmail, urlDatabase, users} = require("./helpers");
 
 
 
@@ -51,8 +46,7 @@ app.post("/register", function(req, res) {
     console.log("user from register", user);
     if (user) {
       return res.status(403).send("This email already used, try another");
-    }
-    else {
+    } else {
       let userID = "user" + generateRandomString();
       users[userID] = {};
       users[userID].id = userID;
@@ -79,7 +73,7 @@ app.get("/login", (req, res) => {
 app.post("/login", function(req, res) {
   console.log(req.body, users);
   if (req.body.email && req.body.email) {
-    // can use Fn find user here - but prefer to use loop key to check password same user
+    // can use Fn find user here - but prefer to use loop key to check password of same user - code still dry
     for (let key in users) {
       if (users[key].email === req.body.email && bcrypt.compareSync(req.body.password, users[key].password)) {
         req.session.user_id = users[key];
@@ -92,11 +86,8 @@ app.post("/login", function(req, res) {
 // POST /logout
 app.post("/logout", function(req, res) {
   req.session = null;
-  // compass ask redirect to /urls - but urls only for logged users
   res.status(302).redirect(`/urls`);
 });
-
-
 
 
 // NEW AND CREATED URLS RENDER SECTION ****************************
@@ -138,7 +129,6 @@ app.post("/urls/:shortURL/delete", (req, res) => {
   } else {
     if (urlDatabase[shortURL].userID === req.session.user_id.id) {
       delete urlDatabase[shortURL];
-      // console.log(urlDatabase)
       res.redirect(`/urls/`);
     }
   }
@@ -213,9 +203,7 @@ app.get("/u/:shortURL", (req, res) => {
   const shortURL = req.params.shortURL;
   if (!urlDatabase[shortURL]) {
     res.status(404).send("Requested URL not found");
-  }
-  // const templateVars = { urls: urlDatabase, user_id : req.session.user_id  };
-  else {
+  } else {
     const shortURL = req.params.shortURL;
     const longURL = urlDatabase[shortURL].longURL;
     res.redirect(longURL);

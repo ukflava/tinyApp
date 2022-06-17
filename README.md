@@ -4,8 +4,9 @@ TinyApp is a full stack web application built with Node and Express that allows 
 
 ## Final Product
 
-!["screenshot description"](#)
-!["screenshot description"](#)
+!["Screenshot of Login page"](https://github.com/ukflava/tinyApp/blob/main/docs/Tiny-login.jpg)
+!["screenshot of Registration page"](https://github.com/ukflava/tinyApp/blob/main/docs/Tiny-register.jpg)
+!["screenshot of New URL page"](https://github.com/ukflava/tinyApp/blob/main/docs/Tiny-new.jpg)
 
 ## Dependencies (current version)
 
@@ -22,3 +23,7 @@ TinyApp is a full stack web application built with Node and Express that allows 
 
 - Install all dependencies (using the `npm install` command).
 - Run the development web server using the `node express_server.js` command.
+
+## Known bugs
+Compass ask redirect users after logout to /urls - and its get an error message after redirect
+- if user is not logged in: returns HTML with a relevant error message

@@ -1,4 +1,4 @@
-
+// Helpers for Tinyapp
 
 const filteredObject = (urlDB,key) => {
   urlDB = Object.keys(urlDB).reduce(function(acc, val) {
@@ -9,6 +9,10 @@ const filteredObject = (urlDB,key) => {
 };
 
 
+const generateRandomString = function() {
+  return Math.floor((1 + Math.random()) * 0x1000000000).toString(30).substring(1);
+};
+
 const getUserByEmail = (key, usersDB) => {
   for (let val in usersDB) {
     if (usersDB[val].email === key) {
@@ -16,7 +20,7 @@ const getUserByEmail = (key, usersDB) => {
     }
   }
 };
+const urlDatabase = {};
+const users = {};
     
-module.exports = {filteredObject, getUserByEmail};
-// module.exports = filteredObject
-// module.exports = getUserByEmail
+module.exports = {generateRandomString, filteredObject, getUserByEmail, urlDatabase, users};
