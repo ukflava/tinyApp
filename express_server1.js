@@ -113,6 +113,7 @@ app.get("/urls/:shortURL", (req, res) => {
           
     urlDatabase[shortURL].statistics.push(`VISITED: ${generateRandomString()} /  DATE: ${new Date(Date.now())}`);
     urlDatabase[shortURL].visited = (urlDatabase[shortURL].visited || 0) + 1;
+    urlDatabase[shortURL].uniqueVisitor = (urlDatabase[shortURL].visited || 0) + 1
     const templateVars = { statistics : urlDatabase[shortURL].statistics, 'shortURL': shortURL, 'longURL': urlDatabase[shortURL].longURL, views: urlDatabase[shortURL].visited,  urls: urlDatabase, user_id : req.session.user_id };
     res.render("urls_show", templateVars);
   } else {
