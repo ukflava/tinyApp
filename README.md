@@ -26,7 +26,7 @@ TinyApp is a full stack web application built with Node and Express that allows 
 ## Getting Started
 
 - Install all dependencies (using the `npm install` command).
-- Run the development web server using the `node express_server.js` command.
+- Run the development web server using the `node express_server1.js` command.
 
 ## Known bugs
 *Compass require to redirect users after logout to /urls - Tinyapp send client an error message after redirect
