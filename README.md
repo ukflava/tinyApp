@@ -8,6 +8,8 @@ TinyApp is a full stack web application built with Node and Express that allows 
 !["screenshot of Registration page"](https://github.com/ukflava/tinyApp/blob/main/docs/Tiny-register.jpg)
 !["screenshot of New URL page"](https://github.com/ukflava/tinyApp/blob/main/docs/Tiny-new.jpg)
 !["screenshot of Main page"](https://github.com/ukflava/tinyApp/blob/main/docs/Tiny-urls.jpg)
+!["screenshot of URL edit page with counters"](https://github.com/ukflava/tinyApp/blob/main/docs/Tiny-edit-with-counter.jpg)
+
 
 ## Dependencies (current version)
 
