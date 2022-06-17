@@ -71,7 +71,7 @@ app.get("/login", (req, res) => {
 
 // POST LOGIN
 app.post("/login", function(req, res) {
-  if (req.body.email && req.body.email) {
+  if (req.body.email && req.body.password) {
     // can use Fn find user here - but prefer to use loop key to check password of same user - code still dry
     for (let key in users) {
       if (users[key].email === req.body.email && bcrypt.compareSync(req.body.password, users[key].password)) {
