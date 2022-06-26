@@ -1,7 +1,4 @@
 // NOTES
-// Identifier 'user_id' is not in camel case - requested by Compass
-
-
 const express = require("express");
 const app = express();
 const PORT = 8080;
@@ -15,8 +12,6 @@ app.set("view engine", "ejs");
 //GLOBAL SCOPE VARS AND FN
 
 const {generateRandomString, filteredObject, getUserByEmail, urlDatabase, users} = require("./helpers");
-
-
 
 // MIDDLEWARE********************************************
 app.use(morgan("dev"));
@@ -87,7 +82,6 @@ app.post("/logout", function(req, res) {
   req.session = null;
   res.status(302).redirect(`/urls`);
 });
-
 
 // NEW AND CREATED URLS RENDER SECTION ****************************
 // GET /urls/new
